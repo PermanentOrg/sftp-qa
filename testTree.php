@@ -7,7 +7,7 @@ $outputFilename =[];
 foreach ($inputCharacters as $inputCharacter) {
    $addMiddleCharacter = $filenameFirst.$inputCharacter.$filenameSecond;
    $addStartCharacter = $inputCharacter.$filenameFirst.$filenameSecond;
-   $addMiEndCharacter = $filenameFirst.$filenameSecond.$inputCharacter;
-   array_push($outputFilename,$addMiddleCharacter, $addStartCharacter, $addMiEndCharacter);
+   $addEndCharacter = $filenameFirst.$filenameSecond.$inputCharacter;
+   array_push($outputFilename,$addMiddleCharacter, $addStartCharacter, $addEndCharacter);
 }
 print_r($outputFilename);
