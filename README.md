@@ -10,6 +10,18 @@ protocol.
 For more context, see [this
 discussion](https://chat.opentechstrategies.com/#narrow/stream/73-Permanent/topic/QA/near/155527).
 
+## Usage
+
+Run `./generate-tree.py` to generate test data, which will be placed
+in a new subdirectory named `test-tree/`.
+
+Then run `./upload-test.sh` to try uploading the data (you'll need to
+[configure
+rclone](https://github.com/PermanentOrg/sftp-service#running-rclone-against-permanentorg-instances)
+first, of course).  See the long comment at the top of
+[upload-test.sh](upload-test.sh) for information about what it's
+trying to do and what problems we know about so far.
+
 ## License
 
 This code and data is open source under the [MIT license](LICENSE).
