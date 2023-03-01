@@ -1,10 +1,15 @@
 # Permanent rclone QA Resources
 
-This project is intended for testing the [SFTP service](https://github.com/PermanentOrg/sftp-service). This repository 
-will have a bunch of helper tools in a separate repository, whose purpose is just to help us do manual QA, and then 
-later that gets turned into automated tests in the SFTP service repository. Refer to our discussions 
-[here](https://chat.opentechstrategies.com/#narrow/stream/73-Permanent/topic/QA/near/155527)
+This code generates sample data for testing the [SFTP
+service](https://github.com/PermanentOrg/sftp-service) for
+[Permanent.org](Permanent.org).  It creates test trees containing
+files with various pathological names, which are meant to be uploaded
+to Permanent via [rclone](https://rclone.org/) using the SFTP
+protocol.
+
+For more context, see [this
+discussion](https://chat.opentechstrategies.com/#narrow/stream/73-Permanent/topic/QA/near/155527).
 
 ## License
 
-This code and data is licensed under [CC0v1.0](LICENSE).
+This code and data is open source under the [MIT license](LICENSE).
