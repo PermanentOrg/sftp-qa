@@ -21,8 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Create directory 'test-tree' containing files with pathological names.
-(If 'test-tree' already exists, delete it and recreate it.)
+"""Create directory 'test-tree/challenging-names' containing files with pathological names.
+(If 'test-tree/challenging-names' already exists, delete it and recreate it.)
 You must run this from this directory because sample source data is here.
 """
 
@@ -31,7 +31,7 @@ import sys
 import shutil
 
 def main():
-    test_tree_top = "test-tree"
+    test_tree_top = "test-tree/challenging-names"
 
     # Filename components.
     front = "front"
@@ -39,12 +39,12 @@ def main():
     text_ext = "txt"
     image_ext = "png"
 
-    # Ensure that an empty test-tree/ dir exists.
+    # Ensure that an empty test_tree_top dir exists.
     if os.path.exists(test_tree_top):
         shutil.rmtree(test_tree_top)
     os.makedirs(test_tree_top)
 
-    # Create all the files in test-tree/.
+    # Create all the files in test_tree_top.
     # 
     # A really rigorous test would try every UTF-8 character.  We're
     # not going to do that, though: it would be too many files and
