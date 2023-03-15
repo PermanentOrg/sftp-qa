@@ -100,13 +100,15 @@ def main():
     os.makedirs(test_tree_top)
 
     for fname in fname_permutations():
+        dst = os.path.join(test_tree_top, fname)
+
         ext = os.path.splitext(fname)[1]
         if ext == ".txt":  # text: use the tiny sample text
-            src = os.path.join("sample-sources", "text-small.txt")
+            with open(dst, 'w') as fh:
+                fh.write(dst)
         else:             # image: use the PNG
             src = os.path.join("sample-sources", "single-pixel.png")
-        dst = os.path.join(test_tree_top, fname)
-        shutil.copy(src, dst)
+            shutil.copy(src, dst)
 
  
 if __name__ == '__main__':
