@@ -80,13 +80,16 @@ def fname_permutations():
                + list(range(ord('{'), 128))):     # '{" through DEL
         ch = chr(ch)
         for ext in (text_ext, image_ext,):
-            for fname in (ch + front + back + "." + ext,
-                          front + ch + back + "." + ext,
-                          front + back + ch + "." + ext,
-                          front + back + "." + ch + ext,
-                          front + back + "." + ch,):
-                ret.append(f"{ident:03}_{fname}")
-                ident += 1
+            ret.append(ch + front + f"_{ident:03}_" + back + "." + ext)
+            ident += 1
+            ret.append(front + f"_{ident:03}_" + ch + back + "." + ext)
+            ident += 1
+            ret.append(front + f"_{ident:03}_" + back + ch + "." + ext)
+            ident += 1
+            ret.append(front + f"_{ident:03}_" + back + "." + ch + ext)
+            ident += 1
+            ret.append(front + f"_{ident:03}_" + back + "." + ch)
+            ident += 1
     return ret                
      
 def main():
