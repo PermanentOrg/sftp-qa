@@ -30,19 +30,16 @@ import os
 import sys
 import shutil
 
-def main():
-    test_tree_top = "test-tree/challenging-names"
+test_tree_top = "test-tree/challenging-names"
 
+def fname_permutations():
     # Filename components.
+    ident = 1
     front = "front"
     back = "back"
     text_ext = "txt"
     image_ext = "png"
 
-    # Ensure that an empty test_tree_top dir exists.
-    if os.path.exists(test_tree_top):
-        shutil.rmtree(test_tree_top)
-    os.makedirs(test_tree_top)
 
     # Create all the files in test_tree_top.
     # 
@@ -76,6 +73,7 @@ def main():
     # we'll figure out how to get it through to disk below.  For now,
     # I'm skipping it in the interests of not letting a perfect yak be
     # the enemy of a perfectly okay yak.
+    ret = []
     for ch in (list(range(1, ord('/')))           # SOH through '.'
                + list(range(ord(':'), ord('A')))  # ':" through '@'
                + list(range(ord('['), ord('a')))  # '[" through '`'
@@ -87,14 +85,26 @@ def main():
                           front + back + ch + "." + ext,
                           front + back + "." + ch + ext,
                           front + back + "." + ch,):
-                if ext == "txt":  # text: use the tiny sample text
-                    src = os.path.join("sample-sources", "text-small.txt")
-                else:             # image: use the PNG
-                    src = os.path.join("sample-sources", "single-pixel.png")
-                dst = os.path.join(test_tree_top, fname)
-                # sys.stderr.write(f"DEBUG: creating {dst}\n")
-                shutil.copy(src, dst)
+                ret.append(f"{ident:03}_{fname}")
+                ident += 1
+    return ret                
+     
+def main():
 
+    # Ensure that an empty test_tree_top dir exists.
+    if os.path.exists(test_tree_top):
+        shutil.rmtree(test_tree_top)
+    os.makedirs(test_tree_top)
 
+    for fname in fname_permutations():
+        ext = os.path.splitext(fname)[1]
+        if ext == ".txt":  # text: use the tiny sample text
+            src = os.path.join("sample-sources", "text-small.txt")
+        else:             # image: use the PNG
+            src = os.path.join("sample-sources", "single-pixel.png")
+        dst = os.path.join(test_tree_top, fname)
+        shutil.copy(src, dst)
+
+ 
 if __name__ == '__main__':
   main()
