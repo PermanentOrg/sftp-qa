@@ -13,7 +13,7 @@ discussion](https://chat.opentechstrategies.com/#narrow/stream/73-Permanent/topi
 ## Usage
 
 Run `./generate-tree.py` to generate test data, which will be placed
-in a new subdirectory named `test-tree/`.
+in a new subdirectory named `test-tree/challenging-names`.
 
 Then run `./upload-test.sh` to try uploading the data (you'll need to
 [configure
