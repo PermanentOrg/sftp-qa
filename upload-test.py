@@ -4,7 +4,7 @@ RCLONE_REMOTE = "permanent-prod"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
 TEST_TREE = "test-tree/challenging-names"
 TIMEOUT = 5 * 60
-LOG_FILE="log.txt"
+LOG_FILE = "log.txt"
 
 import argparse
 import datetime
@@ -79,7 +79,7 @@ def parse_cli():
         args.start = f"{int(args.start):03}"
     if args.log_file:
         LOG_FILE = args.log_file
-        
+
     return args
 
 
