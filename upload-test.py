@@ -3,9 +3,10 @@
 RCLONE_REMOTE = "permanent-prod"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/test-tree"
 TEST_TREE = "test-tree/challenging-names"
-TIMEOUT = 5*60
+TIMEOUT = 5 * 60
 
 import argparse
+import datetime
 import os
 import subprocess
 import sys
@@ -57,7 +58,11 @@ def parse_cli():
     )
     parser.add_argument("--only", help="only test one file number")
     parser.add_argument("--start", help="number of file to start from")
-    parser.add_argument("--timeout", help="number of seconds to allow to upload a file", default="300")
+    parser.add_argument(
+        "--timeout",
+        help="number of seconds to allow to upload a file",
+        default=str(TIMEOUT),
+    )
     args = parser.parse_args()
 
     if args.only:
@@ -69,11 +74,9 @@ def parse_cli():
 
 
 def rclone(fname):
-    """Actually do the rclone on this one file
-
-    Returns CompletedProcess object, or none if subprocess throws an exception"""
-
     args = [
+        "timeout",
+        str(TIMEOUT),
         RCLONE,
         "copy",
         # "--log-level=DEBUG", "--log-file=log.txt",
@@ -83,12 +86,27 @@ def rclone(fname):
         os.path.join(TEST_TREE, fname),
         f"{RCLONE_REMOTE}:{ARCHIVE_PATH}",
     ]
+
+    start_time = datetime.datetime.now()
     try:
-        out = subprocess.run(args, capture_output=True, timeout=60)
+        process = subprocess.Popen(
+            args, stderr=subprocess.STDOUT, stdout=subprocess.PIPE
+        )
+        while True:
+            output = process.stdout.readline().decode("utf-8")
+            if output != "":
+                log(output.strip())
+            if process.poll() is not None:
+                break
     except Exception as e:
         log(f"ERROR: {fname} failed\n{e}")
         return None
-    return out
+
+    elapsed_time = datetime.datetime.now() - start_time
+    log(f"Elapsed time to upload {fname}: {elapsed_time}", True)
+    log(f"Return code for rcloning {fname}: {process.poll()}", True)
+
+    return process
 
 
 def skip_p(fname, cli):
