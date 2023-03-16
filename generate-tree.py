@@ -103,7 +103,7 @@ def main():
         dst = os.path.join(test_tree_top, fname)
 
         ext = os.path.splitext(fname)[1]
-        if ext == ".txt":  # text: use the tiny sample text
+        if fname.endswith("txt"): 
             with open(dst, 'w') as fh:
                 fh.write(dst)
         else:             # image: use the PNG
