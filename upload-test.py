@@ -4,6 +4,7 @@ RCLONE_REMOTE = "permanent-prod"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
 TEST_TREE = "test-tree/challenging-names"
 TIMEOUT = 5 * 60
+LOG_FILE="log.txt"
 
 import argparse
 import datetime
@@ -21,7 +22,7 @@ def log(msg, echo=True):
     """Print message to log file (and screen if echo is True)"""
     if echo:
         print(msg)
-    with open("log.txt", "a") as fh:
+    with open(LOG_FILE, "a") as fh:
         fh.write(msg)
         fh.write("\n")
 
@@ -47,9 +48,12 @@ def omit_p(fname, omit_list):
 
 
 def parse_cli():
+    global LOG_FILE
+
     parser = argparse.ArgumentParser(
         prog="upload-test", description="QA test Permanent rclone", epilog=""
     )
+    parser.add_argument("--log-file", help=f"path to log file (defaults to {LOG_FILE})")
     parser.add_argument(
         "--no-omit",
         action="store_true",
@@ -73,7 +77,9 @@ def parse_cli():
         args.only = f"{int(args.only):03}"
     if args.start:
         args.start = f"{int(args.start):03}"
-
+    if args.log_file:
+        LOG_FILE = args.log_file
+        
     return args
 
 
@@ -83,7 +89,6 @@ def rclone(fname, remote_dir):
         str(TIMEOUT),
         RCLONE,
         "copy",
-        # "--log-level=DEBUG", "--log-file=log.txt",
         "-vv",
         "--size-only",
         "--sftp-set-modtime=false",
