@@ -132,7 +132,6 @@ def skip_p(fname, cli):
 def main():
     # Do some initial setup, parse cli, etc
     cli = parse_cli()
-    started = cli.start == None
     cli.omit_files = slurp_if_e("omit.txt").strip().split("\n")
 
     # Step through all the filenames and try to upload each one
