@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 RCLONE_REMOTE = "permanent-prod"
-ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/test-tree"
+ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
 TEST_TREE = "test-tree/challenging-names"
 TIMEOUT = 5 * 60
 
@@ -56,6 +56,11 @@ def parse_cli():
         help="turn off skipping file numberss listed in omit.txt",
     )
     parser.add_argument("--only", help="only test one file number")
+    parser.add_argument(
+        "--remote-dir",
+        help="remote subdirectory (defaults to 'test-tree')",
+        default="test-tree",
+    )
     parser.add_argument("--start", help="number of file to start from")
     parser.add_argument(
         "--timeout",
@@ -72,7 +77,7 @@ def parse_cli():
     return args
 
 
-def rclone(fname):
+def rclone(fname, remote_dir):
     args = [
         "timeout",
         str(TIMEOUT),
@@ -83,7 +88,7 @@ def rclone(fname):
         "--size-only",
         "--sftp-set-modtime=false",
         os.path.join(TEST_TREE, fname),
-        f"{RCLONE_REMOTE}:{ARCHIVE_PATH}",
+        f"{RCLONE_REMOTE}:{ARCHIVE_PATH}{remote_dir}",
     ]
 
     start_time = datetime.datetime.now()
@@ -141,7 +146,7 @@ def main():
 
         # Try to rclone this file
         log(f"Trying {fname}...")
-        out = rclone(fname)
+        out = rclone(fname, cli.remote_dir)
 
 
 if __name__ == "__main__":
