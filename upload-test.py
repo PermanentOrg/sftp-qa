@@ -10,7 +10,6 @@ import datetime
 import os
 import subprocess
 import sys
-import simplejson as json
 
 gentree = __import__("generate-tree")
 
@@ -117,7 +116,7 @@ def skip_p(fname, cli):
     # Skip files if user said to start from a specific file number
     if cli.start != None:
         if not cli.start in fname:
-            print(f"Not started yet, so skipping {fname}...")
+            print(f"Not started yet (waiting on {cli.start}), so skipping {fname}...")
             return True
         cli.start = None
 
@@ -142,19 +141,8 @@ def main():
             continue
 
         # Try to rclone this file
-        print(f"Trying {fname}...")
+        log(f"Trying {fname}...")
         out = rclone(fname)
-        if not out:
-            continue
-
-        # Capture success and failure
-        msg = {
-            "args": out.args,
-            "returncode": out.returncode,
-            "stderr": out.stderr,
-            "stdout": out.stdout,
-        }
-        log(json.dumps(msg, indent=4), out.returncode != 0)
 
 
 if __name__ == "__main__":
