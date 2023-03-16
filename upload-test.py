@@ -10,7 +10,6 @@ import os
 import subprocess
 import sys
 import simplejson as json
-import time
 
 gentree = __import__("generate-tree")
 
@@ -128,7 +127,6 @@ def main():
         print(f"Trying {fname}...")
         out = rclone(fname)
         if not out:
-            time.sleep(10)
             continue
 
         # Capture success and failure
@@ -139,7 +137,6 @@ def main():
             "stdout": out.stdout,
         }
         log(json.dumps(msg, indent=4), out.returncode != 0)
-        time.sleep(10)
 
 
 if __name__ == "__main__":
