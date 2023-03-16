@@ -3,6 +3,7 @@
 RCLONE_REMOTE = "permanent-prod"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/test-tree"
 TEST_TREE = "test-tree/challenging-names"
+TIMEOUT = 5*60
 
 import argparse
 import os
@@ -50,13 +51,14 @@ def parse_cli():
     parser = argparse.ArgumentParser(
         prog="upload-test", description="QA test Permanent rclone", epilog=""
     )
-    parser.add_argument("--start", help="number of file to start from")
     parser.add_argument(
         "--no-omit",
         action="store_true",
         help="turn off skipping file numberss listed in omit.txt",
     )
     parser.add_argument("--only", help="only test one file number")
+    parser.add_argument("--start", help="number of file to start from")
+    parser.add_argument("--timeout", help="number of seconds to allow to upload a file", default="300")
     args = parser.parse_args()
 
     if args.only:
