@@ -52,14 +52,20 @@ def parse_cli():
     )
     parser.add_argument("--start", help="number of file to start from")
     parser.add_argument(
-        "--no-omit", help="turn off skipping file numberss listed in omit.txt"
+        "--no-omit",
+        action="store_true",
+        help="turn off skipping file numberss listed in omit.txt",
     )
+    parser.add_argument("--only", help="only test one file number")
     args = parser.parse_args()
 
+    if args.only:
+        args.only = f"{int(args.only):03}"
     if args.start:
         args.start = f"{int(args.start):03}"
 
     return args
+
 
 def rclone(fname):
     """Actually do the rclone on this one file
@@ -70,7 +76,7 @@ def rclone(fname):
         RCLONE,
         "copy",
         # "--log-level=DEBUG", "--log-file=log.txt",
-        "-v",
+        "-vv",
         "--size-only",
         "--sftp-set-modtime=false",
         os.path.join(TEST_TREE, fname),
@@ -83,28 +89,38 @@ def rclone(fname):
         return None
     return out
 
- 
+
+def skip_p(fname, cli):
+    "Return True if we should skip this file"
+    if cli.only != None:
+        return not cli.only in fname
+
+    # Skip files if user said to start from a specific file number
+    if cli.start != None:
+        if not cli.start in fname:
+            print(f"Not started yet, so skipping {fname}...")
+            return True
+        cli.start = None
+
+    # Omit files in the omit list
+    if not cli.no_omit:
+        if omit_p(fname, cli.omit_files):
+            print(f"Omitting {fname}...")
+            return True
+
+    return False
+
+
 def main():
     # Do some initial setup, parse cli, etc
     cli = parse_cli()
     started = cli.start == None
-    omit = slurp_if_e("omit.txt").strip().split("\n")
+    cli.omit_files = slurp_if_e("omit.txt").strip().split("\n")
 
     # Step through all the filenames and try to upload each one
     for fname in gentree.fname_permutations():
-
-        # Skip files if user said to start from a specific file number
-        if not started:
-            if not cli.start in fname:
-                print(f"Not started yet, so skipping {fname}...")
-                continue
-            started = True
-
-        # Omit files in the omit list
-        if not cli.no_omit:
-            if omit_p(fname, omit):
-                print(f"Omitting {fname}...")
-                continue
+        if skip_p(fname, cli):
+            continue
 
         # Try to rclone this file
         print(f"Trying {fname}...")
