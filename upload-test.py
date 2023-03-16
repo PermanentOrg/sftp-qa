@@ -2,7 +2,8 @@
 
 RCLONE_REMOTE = "permanent-prod"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
-TEST_TREE = "test-tree/challenging-names"
+CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
+APOD_DIR = "test-tree/apod"
 TIMEOUT = 5 * 60
 LOG_FILE = "log.txt"
 
@@ -51,21 +52,24 @@ def parse_cli():
     global LOG_FILE
 
     parser = argparse.ArgumentParser(
-        prog="upload-test", description="QA test Permanent rclone", epilog=""
+        prog="upload-test",
+        description="QA test Permanent rclone",
+        epilog="For challenging-names, id is a 3-digit number.  For apod, it is a date in %Y-%m-%d format.",
     )
+    parser.add_argument("directory")
     parser.add_argument("--log-file", help=f"path to log file (defaults to {LOG_FILE})")
     parser.add_argument(
         "--no-omit",
         action="store_true",
-        help="turn off skipping file numberss listed in omit.txt",
+        help="turn off skipping file ids listed in omit.txt",
     )
-    parser.add_argument("--only", help="only test one file number")
+    parser.add_argument("--only", help="only test one file id")
     parser.add_argument(
         "--remote-dir",
         help="remote subdirectory (defaults to 'test-tree')",
         default="test-tree",
     )
-    parser.add_argument("--start", help="number of file to start from")
+    parser.add_argument("--start", help="id of file to start from")
     parser.add_argument(
         "--timeout",
         help="number of seconds to allow to upload a file",
@@ -83,18 +87,22 @@ def parse_cli():
     return args
 
 
-def rclone(fname, remote_dir):
-    args = [
-        "timeout",
-        str(TIMEOUT),
-        RCLONE,
-        "copy",
-        "-vv",
-        "--size-only",
-        "--sftp-set-modtime=false",
-        os.path.join(TEST_TREE, fname),
-        f"{RCLONE_REMOTE}:{ARCHIVE_PATH}{remote_dir}",
-    ]
+def rclone(fname, remote_dir, timeout: int = TIMEOUT):
+    args = []
+    if timeout > 0:
+        args.extend(["timeout", str(timeout)])
+
+    args.extend(
+        [
+            RCLONE,
+            "copy",
+            "-vv",
+            "--size-only",
+            "--sftp-set-modtime=false",
+            fname,
+            f"{RCLONE_REMOTE}:{ARCHIVE_PATH}{remote_dir}",
+        ]
+    )
 
     start_time = datetime.datetime.now()
     try:
@@ -144,14 +152,19 @@ def main():
     cli = parse_cli()
     cli.omit_files = slurp_if_e("omit.txt").strip().split("\n")
 
-    # Step through all the filenames and try to upload each one
-    for fname in gentree.fname_permutations():
-        if skip_p(fname, cli):
-            continue
+    if os.path.abspath(cli.directory) == os.path.abspath(CHALLENGING_NAMES_DIR):
+        # Step through all the filenames and try to upload each one
+        for fname in gentree.fname_permutations():
+            if skip_p(fname, cli):
+                continue
 
-        # Try to rclone this file
-        log(f"Trying {fname}...")
-        out = rclone(fname, cli.remote_dir)
+            # Try to rclone this file
+            log(f"Trying {fname}...")
+            out = rclone(os.path.join(CHALLENGING_NAMES_DIR, fname), cli.remote_dir)
+    elif os.path.abspath(cli.directory) == os.path.abspath(APOD_DIR):
+        out = rclone(APOD_DIR, cli.remote_dir, timeout=0)
+    else:
+        sys.exit("Not sure what to do with that directory.")
 
 
 if __name__ == "__main__":
