@@ -102,8 +102,8 @@ def rclone(fname, remote_dir, timeout: int = TIMEOUT):
             RCLONE,
             "copy",
             "-vv",
-            "--size-only",
-            "--sftp-set-modtime=false",
+            "--size-only",  # server doesn't do mtime
+            "--sftp-set-modtime=false",  # server doesn't do mtime
             fname,
             f"{RCLONE_REMOTE}:{ARCHIVE_PATH}{remote_dir}",
         ]
