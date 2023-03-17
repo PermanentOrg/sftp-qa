@@ -175,6 +175,10 @@ def main():
             # Try to rclone this file
             log(f"Trying {fname}...")
             out = rclone(os.path.join(MISC_DIR, fname), cli.remote_dir)
+
+            # Upload file 2 twice
+            if fname[0:3] == "002":
+                out = rclone(os.path.join(MISC_DIR, fname), cli.remote_dir)
     else:
         sys.exit("Not sure what to do with that directory.")
 
