@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-RCLONE_REMOTE = "permanent-prod"
+RCLONE_REMOTE = "permanent-"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
@@ -51,6 +51,7 @@ def omit_p(fname, omit_list):
 
 def parse_cli():
     global LOG_FILE
+    global RCLONE_REMOTE
 
     parser = argparse.ArgumentParser(
         prog="upload-test",
@@ -64,6 +65,7 @@ def parse_cli():
         help="specify file of ids to omit (misc and challenging-names)",
     )
     parser.add_argument("--only", help="only test one file id")
+    parser.add_argument("--remote", help="prod or dev", default="dev")
     parser.add_argument(
         "--remote-dir",
         help="remote subdirectory (defaults to 'test-tree')",
@@ -85,6 +87,7 @@ def parse_cli():
         LOG_FILE = args.log_file
     if args.omit:
         args.omit_files = slurp_if_e(args.omit).strip().split("\n")
+    RCLONE_REMOTE += args.remote
 
     return args
 
