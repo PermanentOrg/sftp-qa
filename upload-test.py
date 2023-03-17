@@ -4,6 +4,7 @@ RCLONE_REMOTE = "permanent-prod"
 ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
+MISC_DIR = "test-tree/misc"
 TIMEOUT = 5 * 60
 LOG_FILE = "log.txt"
 
@@ -59,9 +60,8 @@ def parse_cli():
     parser.add_argument("directory")
     parser.add_argument("--log-file", help=f"path to log file (defaults to {LOG_FILE})")
     parser.add_argument(
-        "--no-omit",
-        action="store_true",
-        help="turn off skipping file ids listed in omit.txt",
+        "--omit",
+        help="specify file of ids to omit (misc and challenging-names)",
     )
     parser.add_argument("--only", help="only test one file id")
     parser.add_argument(
@@ -72,7 +72,7 @@ def parse_cli():
     parser.add_argument("--start", help="id of file to start from")
     parser.add_argument(
         "--timeout",
-        help="number of seconds to allow to upload a file",
+        help="number of seconds to allow to upload a challenging-names or misc file",
         default=str(TIMEOUT),
     )
     args = parser.parse_args()
@@ -83,6 +83,8 @@ def parse_cli():
         args.start = f"{int(args.start):03}"
     if args.log_file:
         LOG_FILE = args.log_file
+    if args.omit:
+        args.omit_files = slurp_if_e(args.omit).strip().split("\n")
 
     return args
 
@@ -139,7 +141,7 @@ def skip_p(fname, cli):
         cli.start = None
 
     # Omit files in the omit list
-    if not cli.no_omit:
+    if cli.omit:
         if omit_p(fname, cli.omit_files):
             print(f"Omitting {fname}...")
             return True
@@ -150,7 +152,6 @@ def skip_p(fname, cli):
 def main():
     # Do some initial setup, parse cli, etc
     cli = parse_cli()
-    cli.omit_files = slurp_if_e("omit.txt").strip().split("\n")
 
     if os.path.abspath(cli.directory) == os.path.abspath(CHALLENGING_NAMES_DIR):
         # Step through all the filenames and try to upload each one
@@ -163,6 +164,14 @@ def main():
             out = rclone(os.path.join(CHALLENGING_NAMES_DIR, fname), cli.remote_dir)
     elif os.path.abspath(cli.directory) == os.path.abspath(APOD_DIR):
         out = rclone(APOD_DIR, cli.remote_dir, timeout=0)
+    elif os.path.abspath(cli.directory) == os.path.abspath(MISC_DIR):
+        for fname in os.listdir(MISC_DIR):
+            if skip_p(fname, cli):
+                continue
+
+            # Try to rclone this file
+            log(f"Trying {fname}...")
+            out = rclone(os.path.join(MISC_DIR, fname), cli.remote_dir)
     else:
         sys.exit("Not sure what to do with that directory.")
 
