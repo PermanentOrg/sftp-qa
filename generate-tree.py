@@ -106,8 +106,11 @@ def main():
         if fname.endswith("txt"): 
             with open(dst, 'w') as fh:
                 fh.write(dst)
-        else:             # image: use the PNG
-            src = os.path.join("sample-sources", "single-pixel.png")
+        elif fname.endswith("jpg"): 
+            src = os.path.join("test-tree/misc", "003-single-pixel.jpg")
+            shutil.copy(src, dst)
+        else:
+            src = os.path.join("test-tree/misc", "004-single-pixel.png")
             shutil.copy(src, dst)
 
  
