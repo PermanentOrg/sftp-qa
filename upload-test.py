@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-RCLONE_REMOTE = "permanent-"
-ARCHIVE_PATH = "/archives/rclone QA 1 (0a0j-0000)/My Files/"
+RCLONE_REMOTE = "permanent"
+ARCHIVE_PATH = ""
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
 MISC_DIR = "test-tree/misc"
@@ -52,6 +52,7 @@ def omit_p(fname, omit_list):
 def parse_cli():
     global LOG_FILE
     global RCLONE_REMOTE
+    global ARCHIVE_PATH
 
     parser = argparse.ArgumentParser(
         prog="upload-test",
@@ -65,7 +66,8 @@ def parse_cli():
         help="specify file of ids to omit (misc and challenging-names)",
     )
     parser.add_argument("--only", help="only test one file id")
-    parser.add_argument("--remote", help="prod or dev", default="dev")
+    parser.add_argument("--remote", help="Name of configured rclone remote such as permanent-prod or permanent-dev")
+    parser.add_argument("--archive-path", help="Archive path in Permanent.")
     parser.add_argument(
         "--remote-dir",
         help="remote subdirectory (defaults to 'test-tree')",
@@ -87,7 +89,13 @@ def parse_cli():
         LOG_FILE = args.log_file
     if args.omit:
         args.omit_files = slurp_if_e(args.omit).strip().split("\n")
-    RCLONE_REMOTE += args.remote
+    if args.archive_path:
+        ARCHIVE_PATH = args.archive_path
+    if args.remote:
+        RCLONE_REMOTE = args.remote
+    else:
+        log("No rclone remote set. Attempting with default remote `permanent`...", True)
+        log("If the default remote `permanent` is not configured uploads would fail.", True)
 
     return args
 
