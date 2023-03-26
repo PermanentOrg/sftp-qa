@@ -10,6 +10,24 @@ protocol.
 For more context, see [this
 discussion](https://chat.opentechstrategies.com/#narrow/stream/73-Permanent/topic/QA/near/155527).
 
+## Testing scope
+
+The scope of testing here verifies the possibility of correctly uploading and downloading
+ a finite set of file types in a particular size range to [Permanent.org](Permanent.org) using [rclone](https://rclone.org/)
+ which talks to permanent using the [SFTP service](https://github.com/PermanentOrg/sftp-service)
+
+### What file types and scenarios are covered?
+
+- Text and png images with obscure names generated via [generate-tree.py](generate-tree.py)
+- Images in `.jpg` and `.png` format downloaded from [APOD](https://apod.nasa.gov/apod) via [apod-downloader.py](apod-downloader.py)
+- Compressed files in `.zip` and `.tar`
+- Videos in `.mp4`, `.webm`, `.gifs` and `.3gp` common in mobile devices.
+- Executable files in `.exe`, `.run`, `.sh`, `.dep` and extension-less bin executables.
+
+### What file types and scenarios are left out?
+
+Anything not included in the section above describing what is currently covered is by implication excluded from these tests.
+
 ## Usage
 
 You would have to install the python requirements used in this repo.
