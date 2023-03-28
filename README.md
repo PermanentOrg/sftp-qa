@@ -10,22 +10,52 @@ protocol.
 For more context, see [this
 discussion](https://chat.opentechstrategies.com/#narrow/stream/73-Permanent/topic/QA/near/155527).
 
+## Testing scope
+
+The scope of testing here verifies the possibility of correctly uploading and downloading
+ a finite set of file types in a particular size range to [Permanent.org](Permanent.org) using [rclone](https://rclone.org/)
+ which talks to permanent using the [SFTP service](https://github.com/PermanentOrg/sftp-service)
+
+### What file types and scenarios are covered?
+
+- Text and png images with obscure names generated via [generate-tree.py](generate-tree.py)
+- Images in `.jpg` and `.png` format downloaded from [APOD](https://apod.nasa.gov/apod) via [apod-downloader.py](apod-downloader.py)
+- Compressed files in `.zip` and `.tar`
+- Videos in `.mp4`, `.webm`, `.gifs` and `.3gp` common in mobile devices.
+- Executable files in `.exe`, `.run`, `.sh`, `.dep` and extension-less bin executables.
+
+### What file types and scenarios are left out?
+
+Anything not included in the section above describing what is currently covered is by implication excluded from these tests.
+
 ## Usage
+
+You would have to install the python requirements used in this repo.
+
+1. `python -m venv venv`
+2. `source venv/bin/activate`
+3. `pip install -r requirements.txt`
+
+*It's possible to just install the requirements on your workspace however steps 1 and  2 would create and activate a virtual environment for this project alone! Recommended!*
 
 ### APOD
 
 Run `./apod-downloader.py` to download a set of Astronomy Of The Day
 photos, in a new directory called `test-tree/apod`.
 
-Run `./upload-test.sh test-tree/apod` to try uploading the APOD photos
+Run `./upload-test.py test-tree/apod --archive-path "/archives/rclone QA 1 (0a0j-0000)/My Files/"` to try uploading the APOD photos
 (and some html) all at once to a directory on the server.
+
+**NB: The `--archive-path` argument specifies the route to the the specific permanent archive to which uploads would be made. So how do you get the archive path? See [Constructing archive path](https://github.com/permanentOrg/sftp-service/#downloading-from-permanent)**
+
+*That said, the archive path used in the sample command would have to be updated to match some archive created on Permanent.org*
 
 ### Challenging Names
 
 Run `./generate-tree.py` to generate test data, which will be placed
 in a new subdirectory named `test-tree/challenging-names`.
 
-Then run `./upload-test.sh test-tree/challenging-names` to try uploading the data (you'll need to
+Then run `./upload-test.py test-tree/challenging-names --archive-path "/archives/rclone QA 1 (0a0j-0000)/My Files/"` to try uploading the data (you'll need to
 [configure
 rclone](https://github.com/PermanentOrg/sftp-service#running-rclone-against-permanentorg-instances)
 first, of course).  See the long comment at the top of
