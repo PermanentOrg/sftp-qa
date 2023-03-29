@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 from utils import log, parse_cli, rclone_upload
+import os
+import sys
 
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
 MISC_DIR = "test-tree/misc"
-
-import os
-import sys
 
 gentree = __import__("generate-tree")
 
@@ -37,7 +36,6 @@ def skip_p(fname, cli):
             return True
 
     return False
-
 
 def main():
     # Do some initial setup, parse cli, etc

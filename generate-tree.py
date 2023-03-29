@@ -27,7 +27,6 @@ You must run this from this directory because sample source data is here.
 """
 
 import os
-import sys
 import shutil
 
 test_tree_top = "test-tree/challenging-names"
