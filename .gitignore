@@ -1,3 +1,4 @@
-test-tree/
+test-tree/*
+!test-tree/misc/
 __pycache__
 venv
