@@ -114,11 +114,11 @@ Run `./upload-test.py test-tree/challenging-names --only=414 --remote-dir=test-4
 ##### Large uploads
 ###### Uploads
 
-To test for large file uploads. A couple of large files are needed and can be downloaded via:
+To test large file (`400MB` +) uploads, a couple of large files are required. Some ready-made test files can be downloaded via:
 
-`./special-files-downloader --large`
+`./special-files-downloader.py --large`
 
-If you have you own large files you would like to test with, you can list the links to those files in a text file like so:
+If you have your own large files or other kinds of files you would like to run tests with, you can list the links to those files in a text file like so:
 
 'my_files.txt'
 ```
@@ -127,16 +127,16 @@ https://link.com/to/file_2.extension
 https://link.com/to/file_3.extension
 ```
 
-and then run `./special-files-downloader --my-sources my_files.txt` 
+and then run `./special-files-downloader.py --my-source my_files.txt`
 
-- *You can specify as many paths as you want*
-- *You can name the the source text file anything you want but pass the right name and path to `--my-sources`*
+- *You can specify as many paths as you want inside the file*
+- *You can name the the source text file anything you want but pass the right name and path to `--my-source`*
 
-**You don't need to download any files if you already have some special files on your computer, simply copy such files into one of these directories `test-tree/special-files/large`, `test-tree/special-files/zips`, `test-tree/special-files/mixed` or `test-tree/special-files/custom`**
+**You don't need to download any files if you already have some special files on your computer, simply copy such files into one of these directories `test-tree/special-files/`, `test-tree/special-files/large`, `test-tree/special-files/zips`,  or `test-tree/special-files/custom`**
 
 Once the files are on disk:
 
-Run `./upload-test.py test-tree/special-files --remote-dir=special-files --log-file=special-files-log.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+Run `./upload-test.py test-tree/special-files/large --remote-dir=large-files --log-file=large-files-log.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
 
 ### What file types and scenarios are left out?
 
