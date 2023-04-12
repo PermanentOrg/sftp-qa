@@ -140,7 +140,7 @@ Run `./upload-test.py test-tree/special-files/large --remote-dir=large-files --l
 
 #### Nested folders/files
 
-##### Uploading
+##### Nested uploads
 
 We have a default nest of folders that goes down 4 levels.
 
@@ -163,7 +163,7 @@ test-tree/misc/nested/
 
 To test a nest with more levels, simply paste a nested folder structure inside `test-tree/misc/nested` or manually create more folder levels in the existing nest.
 
-##### Downloading
+##### Nested downloads
 
 *The steps in the upload section above must be completed before this step*
 
@@ -171,7 +171,7 @@ Run
 
 `./test-download.py --remote=prod --archive-path="/archives/rclone QA 1 (0a21-0000)/My Files/" --remote-dir=nested`
 
-Check downloads folder in `test-tree/downloads` and ensure `downloads/nested` that results looks like the structured previous uploaded in the nested folder upload tests above.
+Check the downloads folder in `test-tree/downloads` and ensure that the `downloads/nested` directory has a structure like the nested directory uploaded in the [nested uploads test](#nested-uploads).
 
 
 ### What file types and scenarios are left out?
