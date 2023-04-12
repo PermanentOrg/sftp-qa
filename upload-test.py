@@ -7,6 +7,7 @@ import sys
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
 MISC_DIR = "test-tree/misc"
+NESTED_DIR = "test-tree/misc/nested"
 
 gentree = __import__("generate-tree")
 
@@ -49,9 +50,9 @@ def main():
 
             # Try to rclone this file
             log(f"Trying {fname}...")
-            out = rclone_upload(os.path.join(CHALLENGING_NAMES_DIR, fname), cli.remote_dir)
+            rclone_upload(os.path.join(CHALLENGING_NAMES_DIR, fname), cli.remote_dir)
     elif os.path.abspath(cli.directory) == os.path.abspath(APOD_DIR):
-        out = rclone_upload(APOD_DIR, cli.remote_dir, timeout=0)
+        rclone_upload(APOD_DIR, cli.remote_dir, timeout=0)
     elif os.path.abspath(cli.directory) == os.path.abspath(MISC_DIR):
         for fname in os.listdir(MISC_DIR):
             if skip_p(fname, cli):
@@ -59,11 +60,13 @@ def main():
 
             # Try to rclone this file
             log(f"Trying {fname}...")
-            out = rclone_upload(os.path.join(MISC_DIR, fname), cli.remote_dir)
+            rclone_upload(os.path.join(MISC_DIR, fname), cli.remote_dir)
 
             # Upload file 2 twice
             if fname[0:3] == "002":
-                out = rclone_upload(os.path.join(MISC_DIR, fname), cli.remote_dir)
+                rclone_upload(os.path.join(MISC_DIR, fname), cli.remote_dir)
+    elif os.path.abspath(cli.directory) == os.path.abspath(NESTED_DIR):
+        rclone_upload(NESTED_DIR, cli.remote_dir, timeout=0)
     else:
         sys.exit("Not sure what to do with that directory.")
 
