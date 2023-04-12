@@ -73,11 +73,11 @@ There is a deduplication algorithm from Permanent that the `sftp-service` relies
 - Run the download test script against the duplicate folder. In this case:
 
 ```
-`./test-download.py --archive-path "/archives/rclone QA 1 (0a0j-0000)/My Files/" --remote-dir "duplicates"`
+`./test-download.py --remote=prod --archive-path "/archives/rclone QA 1 (0a0j-0000)/My Files/" --remote-dir=duplicates`
 ```
 ##### Expected results
 
-- Check download folder and ensure that results looks like:
+- Check downloads folder in `test-tree/downloads` and ensure that results looks like:
 
 *Result from `tree` program*
 ```
@@ -97,7 +97,7 @@ This test case captures what happens if you sync the same path with unchanged co
 
 - Generate challenging names if not generated earlier, see [Challenging Names](#challenging-names)
 
-Run `./upload-test.py test-tree/challenging-names --only=414 --remote-dir=test-414 --log-file=duplicate-upload-log.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+Run `./upload-test.py test-tree/challenging-names --only=414 --remote-dir=test-414 --log-file=log-duplicate-upload.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
 
 *Notice the use of the `--only` flag which specifies only files containing the number `414` should be uploaded, you can change this number to follow a string pattern in the generated challenging names but the provide example works just fine.*
 
@@ -136,7 +136,45 @@ and then run `./special-files-downloader.py --my-source my_files.txt`
 
 Once the files are on disk:
 
-Run `./upload-test.py test-tree/special-files/large --remote-dir=large-files --log-file=large-files-log.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+Run `./upload-test.py test-tree/special-files/large --remote-dir=large-files --log-file=log-large-files.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+##### Nested folders/files
+
+###### Uploading
+
+We have a default nest of folders that goes down 4 levels.
+
+Run `./upload-test.py test-tree/misc/nested/ --remote-dir=nested --log-file=log-nested.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+Verify in the Permanent UI that the folder set to remote dir `--remote-dir` in this case `nested` contains the nested folder with the following structure.
+
+*Result from `tree` program*
+
+```
+test-tree/misc/nested/
+├── nested-level-1
+│   ├── nested-level-2
+│   │   ├── nested-level-3
+│   │   │   └── record-level-3.txt
+│   │   └── record-level-2.txt
+│   └── record-level-1.txt
+└── record-level-0.txt
+```
+
+To test a nest with more levels, simply paste the folder structure inside `test-tree/misc/nested` or manually created more folder levels in the existing nest.
+
+###### Downloading
+
+*The steps in the upload section above must be completed before this step*
+
+Run
+
+`./test-download.py --remote=prod --archive-path="/archives/rclone QA 1 (0a21-0000)/My Files/" --remote-dir=nested`
+
+- Check downloads folder in `test-tree/downloads` and ensure `downloads/nested` that results looks like the structured previous uploaded in the nested folder upload tests above.
+
+
+
 
 ### What file types and scenarios are left out?
 
