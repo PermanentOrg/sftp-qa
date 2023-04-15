@@ -3,6 +3,7 @@
 from utils import log, parse_cli, rclone_upload
 import os
 import sys
+import datetime
 
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
@@ -41,7 +42,7 @@ def skip_p(fname, cli):
 def main():
     # Do some initial setup, parse cli, etc
     cli = parse_cli()
-
+    start_time = datetime.datetime.now()
     if os.path.abspath(cli.directory) == os.path.abspath(CHALLENGING_NAMES_DIR):
         # Step through all the filenames and try to upload each one
         for fname in gentree.fname_permutations():
@@ -69,6 +70,8 @@ def main():
         rclone_upload(NESTED_DIR, cli.remote_dir, timeout=0)
     else:
         sys.exit("Not sure what to do with that directory.")
+    elapsed_time = datetime.datetime.now() - start_time
+    log(f"Last upload run completed in {elapsed_time}...")
 
 
 if __name__ == "__main__":
