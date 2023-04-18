@@ -8,7 +8,6 @@ import datetime
 CHALLENGING_NAMES_DIR = "test-tree/challenging-names"
 APOD_DIR = "test-tree/apod"
 MISC_DIR = "test-tree/misc"
-NESTED_DIR = "test-tree/misc/nested"
 
 gentree = __import__("generate-tree")
 
@@ -66,10 +65,8 @@ def main():
             # Upload file 2 twice
             if fname[0:3] == "002":
                 rclone_upload(os.path.join(MISC_DIR, fname), cli.remote_dir)
-    elif os.path.abspath(cli.directory) == os.path.abspath(NESTED_DIR):
-        rclone_upload(NESTED_DIR, cli.remote_dir, timeout=0)
     else:
-        sys.exit("Not sure what to do with that directory.")
+        rclone_upload(cli.directory, cli.remote_dir, timeout=0)
     elapsed_time = datetime.datetime.now() - start_time
     log(f"Last upload run completed in {elapsed_time}...")
 
