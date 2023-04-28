@@ -174,6 +174,42 @@ Run
 Check the downloads folder in `test-tree/downloads` and ensure that the `downloads/nested` directory has a structure like the nested directory uploaded in the [nested uploads test](#nested-uploads).
 
 
+#### Quantity Tests
+
+To test uploads/downloads with a large number of files, we definitely need "a large number" of files on either side (local/remote) of the process.
+
+To generate a number of files with a specific size in `test-tree/special-files`, run `./create-files.py --quantity 10 --size 10000 --root-name "10-10B"` (*In this case, the command would generate 10, 10 bytes files.*)
+
+*Take note that in the command `--quantity`, `--size` and `--root-name` are arguments whose values you can change. Quanity for number of files, size for file zie and root name for the name of the parent folder that would hold the files*
+##### Large number of uploads
+
+For 1000, 1B Files:
+- Run `./create-files.py`
+
+- Run `./upload-test.py test-tree/special-files/1000-1B --remote-dir=1000-10B --log-file=log-1000-1B.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+For 1000, 10B Files:
+- Run `./create-files.py --quantity 1000 --size 10000 --root-name "1000-10B"`
+
+- Run `./upload-test.py test-tree/special-files/1000-10B --remote-dir=1000-10B --log-file=log-1000-10B.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+For 1000, 1MB Files:
+- Run `./create-files.py --quantity 1000 --size 1000000 --root-name "1000-1MB"`
+
+- Run `./upload-test.py test-tree/special-files/1000-1MB --remote-dir=1000-1MB --log-file=log-1000-1MB.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+For 1000, 5MB Files:
+- Run `./create-files.py --quantity 1000 --size 5000000 --root-name "1000-5MB"`
+
+- Run `./upload-test.py test-tree/special-files/1000-5MB --remote-dir=1000-5MB --log-file=log-1000-5MB.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+*Of course, by looking at the pattern above, other number-size arrangements can be generated for further testing.*
+
+
+##### Large number of downloads
+
+
+
 ### What file types and scenarios are left out?
 
 Anything not included in the section above describing what is currently covered is by implication excluded from these tests.
