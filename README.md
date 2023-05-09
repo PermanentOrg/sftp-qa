@@ -163,6 +163,24 @@ test-tree/misc/nested/
 
 To test a nest with more levels, simply paste a nested folder structure inside `test-tree/misc/nested` or manually create more folder levels in the existing nest.
 
+##### Nested folders with one leaf-file
+
+In this case we test the scenario where a series of folders are empty until the last folder down the tree which contains a single file.
+
+Run `./upload-test.py test-tree/misc/nested-folders-with-one-leaf/ --remote-dir=nested-folders-with-one-leaf --log-file=log-nested-one-leaf.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+Again, verify in the Permanent UI that the folder set to remote dir `--remote-dir` in this case `nested-folders-with-one-leaf` has the following structure.
+
+*Result from `tree` program*
+
+```
+test-tree/misc/nested-folders-with-one-leaf/
+└── nested-level-1
+    └── nested-level-2
+        └── nested-level-3
+            └── leaf.txt
+```
+
 ##### Nested downloads
 
 *The steps in the upload section above must be completed before this step*
