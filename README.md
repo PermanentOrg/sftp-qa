@@ -227,13 +227,16 @@ For 1000, 5MB Files:
 
 *Prepare data variety*
 
-To test a variety of file types/sizes simply create a directory in `test-tree` such as `variety` and store a bunch of diffent files types in the range of a few kilo bytes to about 50 mega bytes. Ideally, a few images (`.png`, `.jpg`), document files (`.docx`, `.ppt`, `.xlxs`), video and sound files, and archive files.
+To test uploads with a variety of file types/sizes, unzip the files archive in `/test-tree/misc/variety/files.zip` into same directory `/test-tree/misc/variety/`
+
+- Unzip : `unzip ./test-tree/misc/variety/files.zip -d ./test-tree/misc/variety` 
 
 *Otherwise* 
 
-- You can download our test data stored in aws via `aws s3 cp s3://permanent-repos/test_files/critical-path.zip ./test-tree/variety`. (Access required via aws authentication)
-- It's a zip file, so remember to unzip: `unzip -d ./test-tree/variety ./test-tree/variety/critical-path.zip`
-- Delete the zip or move it to avoid it being part of the test data `rm ./test-tree/variety/critical-path.zip`
+You can add your own files in the range of a few kilo bytes to about 50 mega bytes in the same location (`/test-tree/misc/variety/files`).
+
+Ideally, a few images (`.png`, `.jpg`), document files (`.docx`, `.ppt`, `.xlxs`), video and sound files, and archive files.
+
 
 *Duplicate data* 
 
@@ -241,13 +244,18 @@ Once you have the files in place, you duplicate the files to achieve a desire vo
 
 The `./duplicate-files` script is designed to create multiple copies of files in a specified source directory. It allows you to make 'n' copies of each file found in the source directory and save them in either the same directory or a different destination directory.
 
-Usage: `./script.sh <source_path> <n> <destination_path (optional)>`
+Usage: `./duplicate-files <source_path> <n> <destination_path (optional)>`
+
+- Create a duplication by 10 `duplicate-files ./test-tree/misc/variety/files 10`
+
+*You can change the number to reduce or increase the number of files and consequently the resulting size.
+
 
 ##### *Variety upload test*
 
 Now you can test uploads with the variety of files set up in `./test-tree/variety`
 
-- Run `./upload-test.py test-tree/variety --remote-dir=variety --log-file=variety.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+- Run `./upload-test.py test-tree/misc/variety/files --remote-dir=variety --log-file=variety.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
 
 
 #### Large number of downloads
