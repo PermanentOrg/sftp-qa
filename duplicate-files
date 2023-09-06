@@ -1,0 +1,60 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 <source_path> <number_of_duplicates> [destination_path]"
+  exit 1
+fi
+
+source_path="$1"
+n="$2"
+destination_path="$3"
+
+if [ ! -d "$source_path" ]; then
+  echo "Error: The specified source path does not exist."
+  exit 1
+fi
+
+if [ "$n" -le 0 ]; then
+  echo "Error: 'n' should be a positive integer."
+  exit 1
+fi
+
+if [ -z "$destination_path" ]; then
+  destination_path="$source_path"
+fi
+
+# Check if the destination path already exists
+if [ ! -d "$destination_path" ]; then
+  echo "Notice: The specified destination path does not exist. Creating it..."
+  mkdir -p "$destination_path"
+fi
+
+# Loop through each file in the specified source path
+for file in "$source_path"/*; do
+  if [ -f "$file" ]; then
+    filename=$(basename "$file")
+    
+    # Check if there's an extension
+    if [[ "$filename" == *.* ]]; then
+      file_extension="${filename##*.}"
+      filename_without_extension="${filename%.*}"
+    else
+      file_extension=""
+      filename_without_extension="$filename"
+    fi
+    
+    # Create 'n' copies of the file in the destination path
+    for ((i = 1; i <= n; i++)); do
+      if [ -z "$file_extension" ]; then
+        new_filename="${filename} ($i)"
+      else
+        new_filename="${filename_without_extension} ($i).$file_extension"
+      fi
+      
+      cp "$file" "$destination_path/$new_filename"
+      echo "Created copy: $destination_path/$new_filename"
+    done
+  fi
+done
+
+echo "Done."

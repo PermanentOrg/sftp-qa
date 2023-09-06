@@ -111,8 +111,8 @@ Run `./upload-test.py test-tree/challenging-names --only=414 --remote-dir=test-4
 ```
 - No duplicates should be be seen on Permanent UI.
 
+### Uploads
 #### Large uploads
-##### Uploads
 
 To test large file (`400MB` +) uploads, a couple of large files are required. Some ready-made test files can be downloaded via:
 
@@ -192,14 +192,14 @@ Run
 Check the downloads folder in `test-tree/downloads` and ensure that the `downloads/nested` directory has a structure like the nested directory uploaded in the [nested uploads test](#nested-uploads).
 
 
-#### Quantity Tests
+### Quantity Tests
 
 To test uploads/downloads with a large number of files, we definitely need "a large number" of files on either side (local/remote) of the process.
 
 To generate a number of files with a specific size in `test-tree/special-files`, run `./create-files.py --quantity 10 --size 10000 --root-name "10-10B"` (*In this case, the command would generate 10, 10 bytes files.*)
 
 *Take note that in the command `--quantity`, `--size` and `--root-name` are arguments whose values you can change. Quanity for number of files, size for file zie and root name for the name of the parent folder that would hold the files*
-##### Large number of uploads
+#### Large number of uploads
 
 For 1000, 1B Files:
 - Run `./create-files.py`
@@ -223,8 +223,34 @@ For 1000, 5MB Files:
 
 *Of course, by looking at the pattern above, other number-size arrangements can be generated for further testing.*
 
+#### Variety of file types/sizes
 
-##### Large number of downloads
+*Prepare data variety*
+
+To test a variety of file types/sizes simply create a directory in `test-tree` such as `variety` and store a bunch of diffent files types in the range of a few kilo bytes to about 50 mega bytes. Ideally, a few images (`.png`, `.jpg`), document files (`.docx`, `.ppt`, `.xlxs`), video and sound files, and archive files.
+
+*Otherwise* 
+
+- You can download our test data stored in aws via `aws s3 cp s3://permanent-repos/test_files/critical-path.zip ./test-tree/variety`. (Access required via aws authentication)
+- It's a zip file, so remember to unzip: `unzip -d ./test-tree/variety ./test-tree/variety/critical-path.zip`
+- Delete the zip or move it to avoid it being part of the test data `rm ./test-tree/variety/critical-path.zip`
+
+*Duplicate data* 
+
+Once you have the files in place, you duplicate the files to achieve a desire volume using the duplication script described in the next section.
+
+The `./duplicate-files` script is designed to create multiple copies of files in a specified source directory. It allows you to make 'n' copies of each file found in the source directory and save them in either the same directory or a different destination directory.
+
+Usage: `./script.sh <source_path> <n> <destination_path (optional)>`
+
+##### *Variety upload test*
+
+Now you can test uploads with the variety of files set up in `./test-tree/variety`
+
+- Run `./upload-test.py test-tree/variety --remote-dir=variety --log-file=variety.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+
+#### Large number of downloads
 
 
 
