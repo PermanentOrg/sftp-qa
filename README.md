@@ -111,8 +111,8 @@ Run `./upload-test.py test-tree/challenging-names --only=414 --remote-dir=test-4
 ```
 - No duplicates should be be seen on Permanent UI.
 
+### Uploads
 #### Large uploads
-##### Uploads
 
 To test large file (`400MB` +) uploads, a couple of large files are required. Some ready-made test files can be downloaded via:
 
@@ -192,14 +192,14 @@ Run
 Check the downloads folder in `test-tree/downloads` and ensure that the `downloads/nested` directory has a structure like the nested directory uploaded in the [nested uploads test](#nested-uploads).
 
 
-#### Quantity Tests
+### Quantity Tests
 
 To test uploads/downloads with a large number of files, we definitely need "a large number" of files on either side (local/remote) of the process.
 
 To generate a number of files with a specific size in `test-tree/special-files`, run `./create-files.py --quantity 10 --size 10000 --root-name "10-10B"` (*In this case, the command would generate 10, 10 bytes files.*)
 
 *Take note that in the command `--quantity`, `--size` and `--root-name` are arguments whose values you can change. Quanity for number of files, size for file zie and root name for the name of the parent folder that would hold the files*
-##### Large number of uploads
+#### Large number of uploads
 
 For 1000, 1B Files:
 - Run `./create-files.py`
@@ -223,8 +223,42 @@ For 1000, 5MB Files:
 
 *Of course, by looking at the pattern above, other number-size arrangements can be generated for further testing.*
 
+#### Variety of file types/sizes
 
-##### Large number of downloads
+*Prepare data variety*
+
+To test uploads with a variety of file types/sizes, unzip the files archive in `/test-tree/misc/variety/files.zip` into same directory `/test-tree/misc/variety/`
+
+- Unzip : `unzip ./test-tree/misc/variety/files.zip -d ./test-tree/misc/variety` 
+
+*Otherwise* 
+
+You can add your own files in the range of a few kilo bytes to about 50 mega bytes in the same location (`/test-tree/misc/variety/files`).
+
+Ideally, a few images (`.png`, `.jpg`), document files (`.docx`, `.ppt`, `.xlxs`), video and sound files, and archive files.
+
+
+*Duplicate data* 
+
+Once you have the files in place, you duplicate the files to achieve a desire volume using the duplication script described in the next section.
+
+The `./duplicate-files` script is designed to create multiple copies of files in a specified source directory. It allows you to make 'n' copies of each file found in the source directory and save them in either the same directory or a different destination directory.
+
+Usage: `./duplicate-files <source_path> <n> <destination_path (optional)>`
+
+- Create a duplication by 10 `duplicate-files ./test-tree/misc/variety/files 10`
+
+*You can change the number to reduce or increase the number of files and consequently the resulting size.
+
+
+##### *Variety upload test*
+
+Now you can test uploads with the variety of files set up in `./test-tree/variety`
+
+- Run `./upload-test.py test-tree/misc/variety/files --remote-dir=variety --log-file=variety.txt --remote=prod --archive-path="/archives/QA (0a21-0000)/My Files/"`
+
+
+#### Large number of downloads
 
 
 

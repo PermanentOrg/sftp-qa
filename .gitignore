@@ -1,5 +1,7 @@
 test-tree/*
 !test-tree/misc/
+test-tree/misc/variety/*
+!test-tree/misc/variety/files.zip
 __pycache__
 venv
 log*.txt
