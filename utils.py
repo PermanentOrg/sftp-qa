@@ -72,6 +72,7 @@ def rclone_upload(fname, remote_dir, timeout: int = TIMEOUT):
             "-vv",
             "--size-only",  # server doesn't do mtime
             "--sftp-set-modtime=false",  # server doesn't do mtime
+            "--inplace",
             fname,
             f"{RCLONE_REMOTE}:{ARCHIVE_PATH}{remote_dir}",
         ]
