@@ -278,4 +278,4 @@ https://dev.permanent.org/app and then log in.
 
 ## License
 
-This code and data is open source under the [MIT license](LICENSE).
+This code and data is open source under [AGPL 3.0](LICENSE.md).
