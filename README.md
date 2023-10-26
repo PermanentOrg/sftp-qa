@@ -250,6 +250,8 @@ Usage: `./duplicate-files <source_path> <n> <destination_path (optional)>`
 
 *You can change the number to reduce or increase the number of files and consequently the resulting size.
 
+*NB: Using `aws s3 cp s3://permanent-repos/test_files/critical-path.zip`, the files in `./test-tree/misc/variety/files.zip` were first downloaded from Permanent aws (authentication necessary for access, ask Permanent admins). It's crucial to note that these test files may have changed in their original source (Permanent aws), so if there must be synchronicity, make sure to verify. Furthermore, these files are identical to those used in https://github.com/PermanentOrg/functional-test for testing. However, the variety files don't actually HAVE to match the ones from the original source for these tests to work; in fact, they can be just about any decent combination of standard files.*
+
 
 ##### *Variety upload test*
 
