@@ -187,10 +187,9 @@ test-tree/misc/nested-folders-with-one-leaf/
 
 Run
 
-`./test-download.py --remote=prod --archive-path="/archives/rclone QA 1 (0a21-0000)/My Files/" --remote-dir=nested`
+`./test-download.py --remote=prod --archive-path="/archives/rclone QA 1 (0a21-0000)/My Files/" --remote-dir=misc/nested`
 
-Check the downloads folder in `test-tree/downloads` and ensure that the `downloads/nested` directory has a structure like the nested directory uploaded in the [nested uploads test](#nested-uploads).
-
+To verify that everything in the nest folder was downloaded correctly run `./verify.py --nested-complete`.
 
 ### Quantity Tests
 
@@ -267,6 +266,12 @@ Now you can test uploads with the variety of files set up in `./test-tree/variet
 ### What file types and scenarios are left out?
 
 Anything not included in the section above describing what is currently covered is by implication excluded from these tests.
+
+## Hash verification
+
+### Modification Detection
+
+To verify that files that were successfully uploaded and downloaded have remained unchanged as we would expect run `./verify.py --succeeded`.
 
 ## Troubleshooting
 
